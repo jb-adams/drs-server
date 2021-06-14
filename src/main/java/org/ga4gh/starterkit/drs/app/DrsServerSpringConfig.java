@@ -20,6 +20,7 @@ import org.ga4gh.starterkit.drs.model.Checksum;
 import org.ga4gh.starterkit.drs.model.DrsObject;
 import org.ga4gh.starterkit.drs.model.DrsServiceInfo;
 import org.ga4gh.starterkit.drs.model.FileAccessObject;
+import org.ga4gh.starterkit.drs.utils.DrsObjectTransformUtil;
 import org.ga4gh.starterkit.drs.utils.cache.AccessCache;
 import org.ga4gh.starterkit.drs.utils.hibernate.DrsHibernateUtil;
 import org.ga4gh.starterkit.drs.utils.requesthandler.AccessRequestHandler;
@@ -293,5 +294,10 @@ public class DrsServerSpringConfig {
     @Bean
     public AccessCache accessCache() {
         return new AccessCache();
+    }
+
+    @Bean
+    public DrsObjectTransformUtil drsObjectTransformUtil() {
+        return new DrsObjectTransformUtil();
     }
 }

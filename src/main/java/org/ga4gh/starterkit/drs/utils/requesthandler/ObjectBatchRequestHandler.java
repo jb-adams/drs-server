@@ -4,15 +4,21 @@ import org.ga4gh.starterkit.common.requesthandler.RequestHandler;
 import org.ga4gh.starterkit.drs.model.DrsCart;
 import org.ga4gh.starterkit.drs.model.DrsObject;
 import org.ga4gh.starterkit.drs.model.Selection;
+import org.ga4gh.starterkit.drs.utils.DrsObjectTransformUtil;
 import org.ga4gh.starterkit.drs.utils.hibernate.DrsHibernateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class ObjectBatchRequestHandler implements RequestHandler<DrsCart> {
 
     @Autowired
+    DrsObjectTransformUtil drsObjectTransformUtil;
+
+    @Autowired
     private DrsHibernateUtil hibernateUtil;
 
     private Selection selection;
+
+    private final boolean expand = false;
 
     public ObjectBatchRequestHandler() {
 
@@ -35,6 +41,9 @@ public class ObjectBatchRequestHandler implements RequestHandler<DrsCart> {
 
             if (drsObject != null) {
                 loaded++;
+                drsObject.setSelfURI(drsObjectTransformUtil.prepareSelfURI(objectId));
+                drsObject.setContents(drsObjectTransformUtil.prepareContents(drsObject, expand));
+                drsObject.setAccessMethods(drsObjectTransformUtil.prepareAccessMethods(drsObject));
                 drsCart.getDrsObjects().put(objectId, drsObject);
             } else {
                 unloaded++;
