@@ -24,6 +24,7 @@ import org.ga4gh.starterkit.drs.utils.cache.AccessCache;
 import org.ga4gh.starterkit.drs.utils.hibernate.DrsHibernateUtil;
 import org.ga4gh.starterkit.drs.utils.requesthandler.AccessRequestHandler;
 import org.ga4gh.starterkit.drs.utils.requesthandler.FileStreamRequestHandler;
+import org.ga4gh.starterkit.drs.utils.requesthandler.ObjectBatchRequestHandler;
 import org.ga4gh.starterkit.drs.utils.requesthandler.ObjectRequestHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -259,6 +260,16 @@ public class DrsServerSpringConfig {
     @RequestScope
     public AccessRequestHandler accessRequestHandler() {
         return new AccessRequestHandler();
+    }
+
+    /**
+     * Get new request handler facilitating DrsObject batch requests
+     * @return DrsObject batch request handler
+     */
+    @Bean
+    @RequestScope
+    public ObjectBatchRequestHandler objectBatchRequestHandler() {
+        return new ObjectBatchRequestHandler();
     }
 
     /**

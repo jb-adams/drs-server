@@ -1,16 +1,20 @@
 package org.ga4gh.starterkit.drs.controller;
 
 import static org.ga4gh.starterkit.drs.constant.DrsApiConstants.DRS_API_V1;
-
 import org.ga4gh.starterkit.common.util.logging.LoggingUtil;
 import org.ga4gh.starterkit.drs.model.AccessURL;
+import org.ga4gh.starterkit.drs.model.DrsCart;
 import org.ga4gh.starterkit.drs.model.DrsObject;
+import org.ga4gh.starterkit.drs.model.Selection;
 import org.ga4gh.starterkit.drs.utils.SerializeView;
 import org.ga4gh.starterkit.drs.utils.requesthandler.AccessRequestHandler;
+import org.ga4gh.starterkit.drs.utils.requesthandler.ObjectBatchRequestHandler;
 import org.ga4gh.starterkit.drs.utils.requesthandler.ObjectRequestHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +33,9 @@ public class Objects {
 
     @Resource(name = "accessRequestHandler")
     private AccessRequestHandler accessRequestHandler;
+
+    @Resource(name = "objectBatchRequestHandler")
+    private ObjectBatchRequestHandler objectBatchRequestHandler;
 
     @Autowired
     private LoggingUtil loggingUtil;
@@ -64,5 +71,19 @@ public class Objects {
     ) {
         loggingUtil.debug("Public API request: AccessURL for DRS id '" + objectId + "', access id '" + accessId + "'");
         return accessRequestHandler.prepare(objectId, accessId).handleRequest();
+    }
+
+    /**
+     * Return a list of DRS objects from a list of requested ids
+     * @param selection selection object containing requested DRS ids
+     * @return list of DRSObjects under the provided ids
+     */
+    @PostMapping
+    @JsonView(SerializeView.Public.class)
+    public DrsCart getDrsObjectBatch(
+        @RequestBody Selection selection
+    ) {
+        loggingUtil.debug("Public API request: DrsObject batch");
+        return objectBatchRequestHandler.prepare(selection).handleRequest();
     }
 }
